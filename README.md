@@ -1,9 +1,13 @@
 # AnimMontage in Unity
 
+버전 : 2020.3.42f1
+
 Unreal Engine의 AnimMontage / AnimNotify 시스템을 Unity에서 구현한 확장 라이브러리입니다.
 
 Unity 기본 AnimationEvent는 AnimationClip에 직접 이벤트를 박아야 하고, 인스펙터에서 타입을 선택하거나 구조적으로 관리하기 어렵습니다.  
 이 라이브러리는 `[SerializeReference]`를 활용한 다형성 직렬화로 **인스펙터에서 Notify 타입을 선택·추가**할 수 있고, 애니메이션 재생 제어 API와 콜백 시스템까지 함께 제공합니다.
+
+중요) 테스트용으로 제작되었습니다
 
 ---
 
@@ -117,8 +121,6 @@ animMontage.GetNowMontageInfo();
 
 Unity Mirror 기반 멀티플레이 배틀로얄 프로젝트 [Project_FC](https://gitlab.com/b_mh/project_fc)에서 전투 히트 판정 타이밍 제어에 실제 적용했습니다.
 
-적용 후 LateUpdate 폴링 방식으로 인한 성능 부하를 확인했고, 이후 프로젝트에서는 적용 범위를 선별하는 방향으로 개선 과제를 도출했습니다.
-
 ---
 
 ## 제한사항
@@ -129,8 +131,15 @@ Unity Mirror 기반 멀티플레이 배틀로얄 프로젝트 [Project_FC](https
 
 ---
 
+## 알려진 문제점
+
+- AnimMontage 스크립트에 추가된 Animation이나 Notify 등이 많아 질 경우 에디터에서 프레임이 떨어지는 문제를 확인
+- force와 관계 없이, 다른 Animation Layer를 사용하기 때문에 기본 Layer에서 Blend되어 자연스럽게 애니메이션이 변경되지 않는 것을 확인
+
+---
+
 ## 배운 점
 
 - Unreal의 AnimMontage 구조를 분석하고 Unity로 재구현하며 **두 엔진의 애니메이션 파이프라인 차이**를 깊이 이해
 - `[SerializeReference]`를 통한 다형성 직렬화로 **에디터 친화적인 확장 구조** 설계 경험
-- `LateUpdate` 폴링 방식의 한계를 실전에서 체감하며 **설계 결정의 트레이드오프**를 판단하는 경험
+- 실제 프로젝트 적용 후 Notify 수가 늘어날수록 LateUpdate 폴링 비용이 커지는 한계를 확인. 적용 범위를 용도에 따라 선별해야 한다는 것을 체감
